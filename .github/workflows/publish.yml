@@ -1,0 +1,22 @@
+name: "publish"
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - "releases/*"
+
+jobs:
+  publish: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: aknot242/nim-gitops-publisher
+          path: nim-gitops-publisher
+      - uses: ./nim-gitops-publisher
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          nim_url: "https://echo.whatis.cloud"
+          conf_files_directory: conf
+          aux_files_directory: auxfiles
